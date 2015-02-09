@@ -47,9 +47,24 @@ mount.cifs //$remote_address/$remote_folder $temporary_mount_point -o $mount_opt
 # Check presence of $backup_folder. Create if not present.
 mkdir -p $backup_folder
 
+# Check whether we own the backups folder or not.
+if [ `whoami` != `stat -c %U $backup_folder` ]
+then
+    echo "Error: Owner of folder $backup_folder is" `stat -c %U $backup_folder` "and different from" `whoami`", exiting."
+    umount $temporary_mount_point
+    rmdir $temporary_mount_point
+    exit 1
+fi
+
 # Check writability of $backup_folder.
-touch $backup_folder/test_file
-rm -f $backup_folder/test_file
+folder_permissions=$(stat -c %a $backup_folder)
+if [ ${folder_permissions:0:1} != 7 ]
+then
+    echo "Folder $backup_folder is not writable, exiting."
+    umount $temporary_mount_point
+    rmdir $temporary_mount_point
+    exit 1
+fi
 
 # Run backup with rsync -aHAX --delete <source> <target>
 rsync $rsync_parameters $temporary_mount_point/ $backup_folder
