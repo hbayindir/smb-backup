@@ -23,8 +23,10 @@ set -e
 ### Configuration Block ###
 temporary_mount_point_base='/tmp/temp_mount'
 mount_options='ro,guest'
-remote_address='your.ip.address.here'
-remote_folder='your-remote-folder-name-here'
+#remote_address='your.ip.address.here'
+remote_address='192.168.1.1'
+#remote_folder='your-remote-folder-name-here'
+remote_folder='trunk'
 backup_folder='backups'
 rsync_parameters='-aHAX --delete'
 
