@@ -10,5 +10,8 @@ In the beginning of the script, there is a configuration block. Set the remote I
 All pull requests and forks are very welcome. Thanks for taking a look!
 
 ## Changelog
+### Version 1.1.1
+- Correct an error message about folder permissions to be more informative.
+
 ### Version 1.1
 - Detect writability of the backups folder in a better way using stat and by checking owner and permissions of the folder. 

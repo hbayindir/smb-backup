@@ -60,7 +60,12 @@ fi
 folder_permissions=$(stat -c %a $backup_folder)
 if [ ${folder_permissions:0:1} != 7 ]
 then
-    echo "Folder $backup_folder is not writable, exiting."
+    # If the permissions is not the way we want, construct a human readable error message.
+    # recycle the variables in the process.
+    folder_permissions=$(stat -c %A $backup_folder)
+    folder_permissions=${folder_permissions:1:3}
+
+    echo "Folder $backup_folder permissions for owner ("`stat -c %U $backup_folder`") is '$folder_permissions', not 'rwx', exiting."
     umount $temporary_mount_point
     rmdir $temporary_mount_point
     exit 1
